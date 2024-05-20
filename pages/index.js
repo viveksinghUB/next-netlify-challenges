@@ -199,17 +199,22 @@ const Home = () => {
               {challenge.data.winner ? (
                 <div>
                   <span>Winner: {challenge.data.winner}</span>
-                  
-                  <button onClick={() => handleUpdateResult(challenge.ref['@ref'].id)} className={styles.endButton}>
-                    Update Result
-                  </button>
+                  <div>
+                    <button onClick={() => handleUpdateResult(challenge.ref['@ref'].id)} className={styles.endButton}>
+                     Update Result
+                    </button>
+                    <button onClick={() => handleDeleteChallenge(challenge.ref['@ref'].id)} className={styles.deleteButton}>Delete Challenge</button>
+                  </div>
                 </div>
               ) : (
-                <button onClick={() => handleEndChallenge(challenge.ref['@ref'].id)} className={styles.endButton}>
+                <div>
+                  <button onClick={() => handleEndChallenge(challenge.ref['@ref'].id)} className={styles.endButton}>
                   End Challenge
-                </button>
+                  </button>
+                  <button onClick={() => handleDeleteChallenge(challenge.ref['@ref'].id)} className={styles.deleteButton}>Delete Challenge</button>
+                </div>
+                
               )}
-              <button onClick={() => handleDeleteChallenge(challenge.ref['@ref'].id)} className={styles.deleteButton}>Delete Challenge</button>
             </div>
           );
         })}
