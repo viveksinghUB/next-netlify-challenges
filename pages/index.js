@@ -4,11 +4,11 @@ const Home = () => {
   const [challenges, setChallenges] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
-    participants: '',
     goal: '',
-    achievement: '',
-    winner: ''
+    daysLeft: '',
+    participants: []
   });
+  const [participantName, setParticipantName] = useState('');
 
   useEffect(() => {
     fetch('/.netlify/functions/get-challenges')
@@ -21,9 +21,19 @@ const Home = () => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
+  const handleAddParticipant = () => {
+    if (participantName) {
+      setFormData(prevState => ({
+        ...prevState,
+        participants: [...prevState.participants, participantName]
+      }));
+      setParticipantName('');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/.netlify/functions/add-challenge', {
+    const response = await fetch('/.netlify/functions/init-challenge', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
@@ -34,11 +44,40 @@ const Home = () => {
       setChallenges(prevChallenges => [...prevChallenges, newChallenge]);
       setFormData({
         name: '',
-        participants: '',
         goal: '',
-        achievement: '',
-        winner: ''
+        daysLeft: '',
+        participants: []
       });
+    }
+  };
+
+  const handleIncrement = async (challengeId, participantName) => {
+    const response = await fetch('/.netlify/functions/update-progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challengeId, participantName, increment: 1 }),
+    });
+
+    if (response.ok) {
+      const updatedChallenge = await response.json();
+      setChallenges(prevChallenges => prevChallenges.map(challenge => 
+        challenge.ref['@ref'].id === updatedChallenge.ref['@ref'].id ? updatedChallenge : challenge
+      ));
+    }
+  };
+
+  const handleEndChallenge = async (challengeId) => {
+    const response = await fetch('/.netlify/functions/end-challenge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challengeId }),
+    });
+
+    if (response.ok) {
+      const updatedChallenge = await response.json();
+      setChallenges(prevChallenges => prevChallenges.map(challenge => 
+        challenge.ref['@ref'].id === updatedChallenge.ref['@ref'].id ? updatedChallenge : challenge
+      ));
     }
   };
 
@@ -55,14 +94,6 @@ const Home = () => {
           required
         />
         <input
-          type="text"
-          name="participants"
-          placeholder="Participants"
-          value={formData.participants}
-          onChange={handleChange}
-          required
-        />
-        <input
           type="number"
           name="goal"
           placeholder="Goal"
@@ -72,32 +103,30 @@ const Home = () => {
         />
         <input
           type="number"
-          name="achievement"
-          placeholder="Achievement"
-          value={formData.achievement}
+          name="daysLeft"
+          placeholder="Number of Days"
+          value={formData.daysLeft}
           onChange={handleChange}
           required
         />
-        <input
-          type="text"
-          name="winner"
-          placeholder="Winner"
-          value={formData.winner}
-          onChange={handleChange}
-          required
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Participant Name"
+            value={participantName}
+            onChange={(e) => setParticipantName(e.target.value)}
+          />
+          <button type="button" onClick={handleAddParticipant}>Add Participant</button>
+        </div>
+        <ul>
+          {formData.participants.map((participant, index) => (
+            <li key={index}>{participant}</li>
+          ))}
+        </ul>
         <button type="submit">Submit</button>
       </form>
-      <h2>Weekly Winners</h2>
+      <h2>Weekly Challenges</h2>
       <ul>
-        {challenges.map((challenge, index) => (
-          <li key={index}>
-            {challenge.data.winner} won the {challenge.data.name} challenge
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default Home;
+        {challenges.map((challenge, index) => {
+          const endDate = new Date(challenge.data.endDate);
+          const daysLeft = Math.max(0, Math.ceil((endDate - new Date()) / (1000 * 60 *
