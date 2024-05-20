@@ -20,7 +20,7 @@ exports.handler = async (event) => {
     const response = await client.query(
       q.Delete(q.Ref(q.Collection('Challenges'), challengeId))
     );
-
+    console.info('response:', response);
     return {
       statusCode: 200,
       body: JSON.stringify(response),
