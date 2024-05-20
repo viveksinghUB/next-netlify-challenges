@@ -58,22 +58,7 @@ const Home = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ challengeId, participantName, increment: 1 }),
     });
-  
-    if (response.ok) {
-      const updatedChallenge = await response.json();
-      setChallenges(prevChallenges => prevChallenges.map(challenge => 
-        challenge.ref['@ref'].id === updatedChallenge.ref['@ref'].id ? updatedChallenge : challenge
-      ));
-    }
-  };
-  
-  const handleDecrement = async (challengeId, participantName) => {
-    const response = await fetch('/.netlify/functions/update-progress', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ challengeId, participantName, increment: -1 }),
-    });
-  
+
     if (response.ok) {
       const updatedChallenge = await response.json();
       setChallenges(prevChallenges => prevChallenges.map(challenge => 
@@ -82,6 +67,20 @@ const Home = () => {
     }
   };
 
+  const handleDecrement = async (challengeId, participantName) => {
+    const response = await fetch('/.netlify/functions/update-progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challengeId, participantName, increment: -1 }),
+    });
+
+    if (response.ok) {
+      const updatedChallenge = await response.json();
+      setChallenges(prevChallenges => prevChallenges.map(challenge => 
+        challenge.ref['@ref'].id === updatedChallenge.ref['@ref'].id ? updatedChallenge : challenge
+      ));
+    }
+  };
 
   const handleEndChallenge = async (challengeId) => {
     const response = await fetch('/.netlify/functions/end-challenge', {
@@ -95,6 +94,18 @@ const Home = () => {
       setChallenges(prevChallenges => prevChallenges.map(challenge => 
         challenge.ref['@ref'].id === updatedChallenge.ref['@ref'].id ? updatedChallenge : challenge
       ));
+    }
+  };
+
+  const handleDeleteChallenge = async (challengeId) => {
+    const response = await fetch('/.netlify/functions/delete-challenge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challengeId }),
+    });
+
+    if (response.ok) {
+      setChallenges(prevChallenges => prevChallenges.filter(challenge => challenge.ref['@ref'].id !== challengeId));
     }
   };
 
@@ -172,6 +183,7 @@ const Home = () => {
               {daysLeft > 0 && (
                 <button onClick={() => handleEndChallenge(challenge.ref['@ref'].id)} className={styles.endButton}>End Challenge</button>
               )}
+              <button onClick={() => handleDeleteChallenge(challenge.ref['@ref'].id)} className={styles.deleteButton}>Delete Challenge</button>
             </div>
           );
         })}
