@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from '../styles/Home.module.css'; // Import CSS module
 
 const Home = () => {
   const [challenges, setChallenges] = useState([]);
@@ -82,9 +83,9 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1>Weekly Challenge</h1>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Weekly Challenge</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="text"
           name="name"
@@ -92,6 +93,7 @@ const Home = () => {
           value={formData.name}
           onChange={handleChange}
           required
+          className={styles.input}
         />
         <input
           type="number"
@@ -100,6 +102,7 @@ const Home = () => {
           value={formData.goal}
           onChange={handleChange}
           required
+          className={styles.input}
         />
         <input
           type="number"
@@ -108,25 +111,56 @@ const Home = () => {
           value={formData.daysLeft}
           onChange={handleChange}
           required
+          className={styles.input}
         />
-        <div>
+        <div className={styles.participantInput}>
           <input
             type="text"
             placeholder="Participant Name"
             value={participantName}
             onChange={(e) => setParticipantName(e.target.value)}
+            className={styles.participantName}
           />
-          <button type="button" onClick={handleAddParticipant}>Add Participant</button>
+          <button type="button" onClick={handleAddParticipant} className={styles.addButton}>Add Participant</button>
         </div>
-        <ul>
+        <ul className={styles.participantList}>
           {formData.participants.map((participant, index) => (
-            <li key={index}>{participant}</li>
+            <li key={index} className={styles.participantItem}>{participant}</li>
           ))}
         </ul>
-        <button type="submit">Submit</button>
+        <button type="submit" className={styles.submitButton}>Submit</button>
       </form>
-      <h2>Weekly Challenges</h2>
-      <ul>
+      <div className={styles.challenges}>
+        <h2 className={styles.subtitle}>Weekly Challenges</h2>
         {challenges.map((challenge, index) => {
           const endDate = new Date(challenge.data.endDate);
-          const daysLeft = Math.max(0, Math.ceil((endDate - new Date()) / (1000 * 60 *
+          const daysLeft = Math.max(0, Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)));
+
+          return (
+            <div key={index} className={styles.challengeCard}>
+              <h3>{challenge.data.name}</h3>
+              <p><strong>Goal:</strong> {challenge.data.goal}</p>
+              <p><strong>Days Left:</strong> {daysLeft}</p>
+              <ul className={styles.progressList}>
+                {challenge.data.participants.map((participant, idx) => (
+                  <li key={idx} className={styles.progressItem}>
+                    {participant.name}: {participant.progress}
+                    <button onClick={() => handleIncrement(challenge.ref['@ref'].id, participant.name)} className={styles.incrementButton}>Increment</button>
+                  </li>
+                ))}
+              </ul>
+              {daysLeft === 0 && (
+                <p className={styles.winner}>Winner: {challenge.data.winner || 'No winner'}</p>
+              )}
+              {daysLeft > 0 && (
+                <button onClick={() => handleEndChallenge(challenge.ref['@ref'].id)} className={styles.endButton}>End Challenge</button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default Home;

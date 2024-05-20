@@ -1,0 +1,136 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .input {
+    width: calc(100% - 10px);
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .participantInput {
+    display: flex;
+    align-items: center;
+  }
+  
+  .participantName {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .addButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .addButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .participantList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .participantItem {
+    margin-bottom: 5px;
+  }
+  
+  .submitButton {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .submitButton:hover {
+    background-color: #218838;
+  }
+  
+  .challenges {
+    margin-top: 20px;
+  }
+  
+  .subtitle {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .challengeCard {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+  }
+  
+  .progressList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .progressItem {
+    margin-bottom: 5px;
+  }
+  
+  .incrementButton {
+    padding: 5px 10px;
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .incrementButton:hover {
+    background-color: #ffa000;
+  }
+  
+  .winner {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .endButton {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .endButton:hover {
+    background-color: #c82333;
+  }
+  
