@@ -18,7 +18,7 @@ exports.handler = async (event) => {
     }
 
     const response = await client.query(
-      q.Delete(q.Ref(q.Collection('Challenges'), challengeId))
+      q.Delete(q.Ref(q.Collection('challenges'), challengeId))
     );
     console.info('response:', response);
     return {
