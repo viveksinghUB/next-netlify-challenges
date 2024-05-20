@@ -199,6 +199,7 @@ const Home = () => {
               {challenge.data.winner ? (
                 <div>
                   <span>Winner: {challenge.data.winner}</span>
+                  
                   <button onClick={() => handleUpdateResult(challenge.ref['@ref'].id)} className={styles.endButton}>
                     Update Result
                   </button>
