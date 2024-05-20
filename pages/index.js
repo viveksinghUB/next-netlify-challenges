@@ -58,7 +58,7 @@ const Home = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ challengeId, participantName, increment: 1 }),
     });
-
+  
     if (response.ok) {
       const updatedChallenge = await response.json();
       setChallenges(prevChallenges => prevChallenges.map(challenge => 
@@ -66,6 +66,22 @@ const Home = () => {
       ));
     }
   };
+  
+  const handleDecrement = async (challengeId, participantName) => {
+    const response = await fetch('/.netlify/functions/update-progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challengeId, participantName, increment: -1 }),
+    });
+  
+    if (response.ok) {
+      const updatedChallenge = await response.json();
+      setChallenges(prevChallenges => prevChallenges.map(challenge => 
+        challenge.ref['@ref'].id === updatedChallenge.ref['@ref'].id ? updatedChallenge : challenge
+      ));
+    }
+  };
+
 
   const handleEndChallenge = async (challengeId) => {
     const response = await fetch('/.netlify/functions/end-challenge', {
@@ -146,6 +162,7 @@ const Home = () => {
                   <li key={idx} className={styles.progressItem}>
                     {participant.name}: {participant.progress}
                     <button onClick={() => handleIncrement(challenge.ref['@ref'].id, participant.name)} className={styles.incrementButton}>Increment</button>
+                    <button onClick={() => handleDecrement(challenge.ref['@ref'].id, participant.name)} className={styles.decrementButton}>Decrement</button>
                   </li>
                 ))}
               </ul>
