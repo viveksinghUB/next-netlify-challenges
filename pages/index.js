@@ -180,6 +180,7 @@ const Home = () => {
                   </li>
                 ))}
               </ul>
+              <div>
               {challenge.data.winner ? (
                 <div>
                   <span>Winner: {challenge.data.winner}</span>
@@ -192,14 +193,7 @@ const Home = () => {
                   End Challenge
                 </button>
               )}
-              {/* {challenge.data.winner && (
-                <div>
-                  <span>Winner: {challenge.data.winner}</span>
-                </div>
-              )}
-              {daysLeft > 0 && (
-                <button onClick={() => handleEndChallenge(challenge.ref['@ref'].id)} className={styles.endButton}>End Challenge</button>
-              )} */}
+            </div>
               <button onClick={() => handleDeleteChallenge(challenge.ref['@ref'].id)} className={styles.deleteButton}>Delete Challenge</button>
             </div>
           );
