@@ -160,9 +160,12 @@ const Home = () => {
       <div className={styles.challenges}>
         <h2 className={styles.subtitle}>Weekly Challenges</h2>
         {challenges.map((challenge, index) => {
-          const endDate = new Date(challenge.data.endDate);
-          const daysLeft = Math.max(0, Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)));
-
+          const startDate = new Date(challenge.data.startDate); // Get start date from challenge data
+          const endDate = new Date(startDate); // Create end date by adding days to start date
+          endDate.setDate(startDate.getDate() + challenge.data.daysLeft); // Add daysLeft to start date
+          const currentDate = new Date();
+          const daysLeft = Math.max(0, Math.ceil((endDate - currentDate) / (1000 * 60 * 60 * 24)));
+          
           return (
             <div key={index} className={styles.challengeCard}>
               <h3>{challenge.data.name}</h3>
