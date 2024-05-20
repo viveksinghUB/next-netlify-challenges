@@ -4,7 +4,7 @@ const { Client, query: q } = faunadb;
 exports.handler = async (event) => {
   try {
     const client = new Client({
-      secret: process.env.FAUNA_SECRET_KEY, // Ensure this environment variable is set
+      secret: process.env.FAUNA_DB_ADMIN, // Ensure this environment variable is set
     });
 
     const data = JSON.parse(event.body);
