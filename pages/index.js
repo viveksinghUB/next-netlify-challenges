@@ -109,6 +109,22 @@ const Home = () => {
     }
   };
 
+  const handleUpdateResult = async (challengeId) => {
+    const response = await fetch('/.netlify/functions/update-result', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challengeId }),
+    });
+  
+    if (response.ok) {
+      const updatedChallenge = await response.json();
+      setChallenges(prevChallenges => prevChallenges.map(challenge => 
+        challenge.ref['@ref'].id === updatedChallenge.ref['@ref'].id ? updatedChallenge : challenge
+      ));
+    }
+  };
+  
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Weekly Challenge</h1>
