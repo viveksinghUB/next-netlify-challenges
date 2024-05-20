@@ -23,7 +23,7 @@ exports.handler = async (event) => {
 
   try {
     const response = await client.query(
-      q.Create(q.Collection('Challenges'), {
+      q.Create(q.Collection('challenges'), {
         data: {
           name,
           goal,
