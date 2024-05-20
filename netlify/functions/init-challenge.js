@@ -6,9 +6,15 @@ exports.handler = async (event) => {
   const data = JSON.parse(event.body);
   const { name, goal, participants, daysLeft } = data;
 
-  const startDate = new Date();
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + daysLeft);
+  // const startDate = new Date();
+  // const endDate = new Date(startDate);
+  // endDate.setDate(startDate.getDate() + daysLeft);
+
+  const startDate = new Date().toISOString(); // Current date
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + parseInt(daysLeft)); // Calculate end date
+  const endDateString = endDate.toISOString();
+
 
   const participantsWithProgress = participants.map(participant => ({
     name: participant,
@@ -17,11 +23,27 @@ exports.handler = async (event) => {
 
   try {
     const response = await client.query(
-      q.Create(
-        q.Collection('challenges'),
-        { data: { name, goal, participants: participantsWithProgress, daysLeft, startDate, endDate, winner: null } }
-      )
+      q.Create(q.Collection('Challenges'), {
+        data: {
+          name,
+          goal,
+          daysLeft: parseInt(daysLeft),
+          participants: participants.map(participant => ({
+            name: participant,
+            progress: 0
+          })),
+          startDate,
+          endDate: endDateString,
+        },
+      })
     );
+    
+    // const response = await client.query(
+    //   q.Create(
+    //     q.Collection('challenges'),
+    //     { data: { name, goal, participants: participantsWithProgress, daysLeft, startDate, endDate, winner: null } }
+    //   )
+    // );
     return {
       statusCode: 200,
       body: JSON.stringify(response),
