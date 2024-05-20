@@ -5,19 +5,9 @@ exports.handler = async () => {
   const client = new faunadb.Client({ secret: process.env.FAUNADB_SECRET });
 
   try {
-    // const response = await client.query(
-    //   q.Map(
-    //     q.Paginate(q.Documents(q.Collection('challenges'))),
-    //     q.Lambda(x => q.Get(x))
-    //   )
-    // );
     const response = await client.query(
       q.Map(
-        q.Paginate(
-          q.Match(
-            q.Index('challenges_by_ts') // assuming you have this index created
-          )
-        ),
+        q.Paginate(q.Documents(q.Collection('challenges'))),
         q.Lambda(x => q.Get(x))
       )
     );
