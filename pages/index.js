@@ -180,9 +180,14 @@ const Home = () => {
                   </li>
                 ))}
               </ul>
-              {daysLeft === 0 && (
-                <p className={styles.winner}>Winner: {challenge.data.winner || 'No winner'}</p>
+              {challenge.data.winner && (
+                <div>
+                  <span>Winner: {challenge.data.winner}</span>
+                </div>
               )}
+              {/* {daysLeft === 0 && (
+                <p className={styles.winner}>Winner: {challenge.data.winner || 'No winner'}</p>
+              )} */}
               {daysLeft > 0 && (
                 <button onClick={() => handleEndChallenge(challenge.ref['@ref'].id)} className={styles.endButton}>End Challenge</button>
               )}
